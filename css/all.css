@@ -1,0 +1,125 @@
+*{
+	margin:0;
+	padding:0;
+}
+ul, ol, dl, p, h1, h2, h3, h4, h5, h6, address, form, table, blockquote, applet, embed, object, iframe, frameset{margin:0 0 20px;}
+html, body, div, span, applet, embed, object, iframe, frameset,
+p, q, blockquote, sub, sup, a, abbr, acronym, font, img, small, center,
+h1, h2, h3, h4, h5, h6, b, strong, big, u, ins,
+i, cite, em, var, dfn, address, s, strike, del,
+dl, dt, dd, ol, ul, li, pre, code, kbd, samp, tt,
+fieldset, legend, form, label, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, footer, header,
+hgroup, menu, nav, section, summary, time, mark, audio,video{
+	border:0;
+	background:none;
+}
+input, textarea, select{
+	font:100% arial,sans-serif;
+	vertical-align:middle;
+	color:#000;
+	overflow:auto;
+}
+label{vertical-align:middle;}
+button, input{
+	width: auto;
+	overflow: visible;
+}
+h1, h2, h3, h4, h5, h6, b, strong, th{font-weight:bold;}
+h2{font-size:150%;}
+h3{font-size:120%;}
+h4{font-size:110%;}
+h5{font-size:100%;}
+h6{font-size:90%;}
+i, cite, em, var, dfn, address{font-style:italic;}
+u, ins {text-decoration: underline;}
+s, strike, del {text-decoration: line-through;}
+blockquote, blockquote:before, blockquote:after, q, q:before, q:after {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after {content: '';}
+table, caption, tbody, tfoot, thead, tr, th, td{
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+th, td{
+	border:1px solid #ccc;
+	padding:3px 7px;
+	text-align:left;
+	vertical-align:top;
+}
+th{
+	border-color:#999;
+	text-align:center;
+	vertical-align:middle;
+}
+ul{margin-left:1px;}
+ul li{
+	list-style-type:disc;
+	list-style-position:inside;
+}
+html{height:100%;}
+body{
+	margin:0;
+	color:#000;
+	font:16px/20px Georgia, "Times New Roman", Times, serif;
+	background:#fff;
+	height:100%;
+	min-width:960px;
+}
+a{
+	color:#000;
+	text-decoration:underline;
+}
+a:hover{text-decoration:none;}
+
+
+#wrapper {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+.container{
+	width: 100%;
+
+}
+.left-nav{
+	float: left;
+	width: 200px;
+	margin: 0 0 0 -200px;
+}
+.right-nav{
+	float: right;
+	width: 250px;
+	margin: 0 -250px 0 0;
+}
+
+/* Styling */
+
+.container{
+	background: yellow;
+}
+.container .header{
+	padding: 10px;
+	background: red;
+	text-align: center;
+}
+.container .content{
+	padding: 10px;
+}
+.left-nav,
+.right-nav{
+	background: gray;
+}
+.left-opener,
+.right-opener{
+	overflow: hidden;
+	text-indent: -999px;
+	width: 20px;
+	height: 20px;
+	background: #000;
+}
+.left-opener{
+	float: left;
+}
+.right-opener{
+	float: right;
+}

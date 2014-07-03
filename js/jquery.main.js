@@ -1,55 +1,29 @@
-// page init
-jQuery(function(){
-    initPushMenu();
-});
-
-function initPushMenu(){
-    jQuery('.container').pushMenu({
-        opener: '.left-opener',
-        slide: '.left-nav',
-        activeClass: 'pushed',
-        direction: 'left',
-        hideOnClickOutside: true,
-        pushContainer: true,
-        stretchSlideToContainer: true,
-        animSpeed: 400
-    });
-    jQuery('.container').pushMenu({
-        opener: '.right-opener',
-        slide: '.right-nav',
-        activeClass: 'pushed',
-        direction: 'right',
-        hideOnClickOutside: true,
-        pushContainer: false,
-        stretchSlideToContainer: true,
-        animSpeed: 400
-    });
-}
-
 /*
  * jQuery PushMenu plugin
  */
 ;(function($){
     function PushMenu(options){
         this.options = $.extend({
-            holder: null,
-            opener: '.opener',
-            slide: '.slide',
+            opener: '.js-push-opener',
+            slide: '.js-push-slide',
             activeClass: 'pushed',
             direction: 'left', // or right
             hideOnClickOutside: false,
             pushContainer: true,
             stretchSlideToContainer: false,
-            animSpeed: 400
+            animSpeed: 400,
+            onInit:null,
+            animStart:null,
+            animEnd:null
         }, options);
-        
         this.init();
     }
     PushMenu.prototype = {
         init: function(){
             this.findElements();
-            this.makeCallback('onInit', this);
             this.attachEvents();
+
+            this.makeCallback('onInit', this);
         },
         findElements: function(){
             this.holder = $(this.options.holder);
@@ -78,7 +52,9 @@ function initPushMenu(){
             }
         },
         attachEvents: function(){
-            var self = this;
+            var self = this,
+                winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                timer;
 
             this.clickHandler = function(e){
                 e.preventDefault();
@@ -88,7 +64,7 @@ function initPushMenu(){
                 } else {
                     self.showSlide();
                 }
-            }
+            };
             this.outsideClickHandler = function(e) {
                 if(self.options.hideOnClickOutside) {
                     var target = $(e.target);
@@ -96,10 +72,16 @@ function initPushMenu(){
                         self.hideSlide();
                     }
                 }
-            }
+            };
             this.resizeHandler = function(){
-                self.hideSlide();
-            }
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(function(){
+                    if (+winWidth !== +(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)){
+                        self.hideSlide();
+                        winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;;
+                    }
+                }, 100);
+            };
 
             if (this.holder.hasClass(this.options.activeClass)) {
                 $(document).on('click touchstart', this.outsideClickHandler);
@@ -107,7 +89,6 @@ function initPushMenu(){
 
             this.opener.on('click touchstart', this.clickHandler);
             $(window).on('resize orientationchange', this.resizeHandler);
-
         },
         showSlide: function(){
             var self = this;
@@ -117,9 +98,9 @@ function initPushMenu(){
                 this.propObj[this.options.direction] = this.slideWidth;
             }
 
-            this.makeCallback('animStart', true);
+            this.makeCallback('animStart', true, this);
             this.box.stop().animate(this.propObj, this.options.animSpeed, function(){
-                self.makeCallback('animEnd', true);
+                self.makeCallback('animEnd', true, self);
             });
 
             if (this.options.stretchSlideToContainer){
@@ -138,9 +119,9 @@ function initPushMenu(){
                 this.propObj[this.options.direction] = 0;
             }
 
-            this.makeCallback('animStart', false);
+            this.makeCallback('animStart', false, this);
             this.box.stop().animate(this.propObj, this.options.animSpeed, function(){
-                self.makeCallback('animEnd', false);
+                self.makeCallback('animEnd', false, self);
             });
 
             this.holder.removeClass(this.options.activeClass)
@@ -149,8 +130,7 @@ function initPushMenu(){
         },
         makeCallback: function(name) {
             if(typeof this.options[name] === 'function') {
-                var args = Array.prototype.slice.call(arguments);
-                args.shift();
+                var args = Array.prototype.slice.call(arguments, 1);
                 this.options[name].apply(this, args);
             }
         },
@@ -160,12 +140,16 @@ function initPushMenu(){
             this.slide.css({position:'',left:'', right:'',height:''});
             $(window).off('resize orientationchange', this.resizeHandler);
             $(document).off('click touchstart', this.outsideClickHandler);
+            this.holder.removeData('PushMenu')
         }
     }
 
     $.fn.pushMenu = function(options){
         return this.each(function(){
-            $(this).data('PushMenu', new PushMenu($.extend(options, {holder:this})));
+            var elem = $(this);
+            if (!elem.data('PushMenu')){
+                elem.data('PushMenu', new PushMenu($.extend(options, {holder:this})));
+            }
         });
     };
-})(jQuery)
+})(jQuery);
